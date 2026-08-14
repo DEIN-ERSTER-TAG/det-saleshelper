@@ -33,7 +33,7 @@ module.exports = async (req, res) => {
     const tagged = [
       ...schulcards.map(e => ({ ...e, _type: 'schulcard', _label: 'Schulcard', _url: 'https://schulcard-generator.vercel.app' })),
       ...praesentationen.map(e => ({ ...e, _type: 'praesentation', _label: 'Präsentation', _url: '#' })),
-      ...angebote.map(e => ({ ...e, _type: 'angebot', _label: 'Angebot', _url: '#' })),
+      ...angebote.map(e => ({ ...e, _type: 'angebot', _label: 'Angebot', _url: 'https://angebot-generator-pi.vercel.app' })),
     ].sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
 
     return res.json({ items: tagged });
