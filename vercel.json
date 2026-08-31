@@ -1,5 +1,9 @@
 {
   "functions": {
-    "api/dashboard.js": { "maxDuration": 15 }
-  }
+    "api/dashboard.js": { "maxDuration": 15 },
+    "api/cleanup.js": { "maxDuration": 60 }
+  },
+  "crons": [
+    { "path": "/api/cleanup", "schedule": "0 3 * * *" }
+  ]
 }

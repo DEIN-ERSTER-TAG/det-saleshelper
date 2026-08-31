@@ -28,5 +28,5 @@ export default function middleware(request) {
 }
 
 export const config = {
-  matcher: '/((?!favicon.ico).*)',
+  matcher: '/((?!favicon.ico|api/cleanup).*)',
 };
