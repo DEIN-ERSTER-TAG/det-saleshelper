@@ -9,10 +9,19 @@ const REDIS_TOKEN   = process.env.UPSTASH_REDIS_REST_TOKEN;
 const GITHUB_TOKEN  = process.env.GITHUB_TOKEN;
 const VERCEL_TOKEN  = process.env.VERCEL_TOKEN;
 const CRON_SECRET   = process.env.CRON_SECRET;
+// Firmen-Team (Migration weg vom persönlichen Account). Wenn nicht gesetzt,
+// bleibt der Vercel-Call im persönlichen Scope des Tokens (bisheriges Verhalten).
+const VERCEL_TEAM_ID = process.env.VERCEL_TEAM_ID;
 
 const RETENTION_MS = 6 * 30 * 24 * 60 * 60 * 1000; // 6 Monate (fixe Frist, kein Status-Tracking)
 const CLEANUP_LOG_KEY = 'cleanup_log';
 const CLEANUP_LOG_MAX = 200;
+
+function withTeam(apiPath) {
+  if (!VERCEL_TEAM_ID) return apiPath;
+  const sep = apiPath.includes('?') ? '&' : '?';
+  return `${apiPath}${sep}teamId=${VERCEL_TEAM_ID}`;
+}
 
 async function redisCmd(...args) {
   const res = await fetch(REDIS_URL, {
@@ -56,7 +65,7 @@ async function deleteRepo(repo) {
 
 async function deleteVercelProject(projectId) {
   if (!projectId) return true;
-  const res = await vc('DELETE', `/v9/projects/${projectId}`);
+  const res = await vc('DELETE', withTeam(`/v9/projects/${projectId}`));
   return res.status === 204 || res.status === 404;
 }
 
